@@ -8,5 +8,5 @@ core:
     - "3000:3000"
   links:
     - store
-  # volumes:
-    # - "./src:/usr/src/app/src"
+  volumes:
+    - "./dist:/usr/src/app/dist"

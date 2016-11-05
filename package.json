@@ -19,6 +19,7 @@
     "webpack": "^1.13.3"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^4.0.0",
     "html-webpack-plugin": "^2.24.1"
   }
 }

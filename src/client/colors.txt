@@ -1,0 +1,17 @@
+super dark
+6A7C79
+
+dark
+7A918D
+
+darkish
+93B1A7
+
+mid
+99C2A2
+
+light
+C5EDAC
+
+lightest
+DBFEB8

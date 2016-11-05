@@ -13,3 +13,6 @@ function connect (dbAddr) {
   var options = { server: { socketOptions: { keepAlive: 1 } } };
   return mongoose.connect(dbAddr, options).connection;
 }
+
+require('./tag.model.js');
+require('./note.model.js');

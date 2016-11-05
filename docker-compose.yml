@@ -1,0 +1,12 @@
+store:
+  image: mongo
+  ports:
+   - "27017:27017"
+core:
+  build: .
+  ports:
+    - "3000:3000"
+  links:
+    - store
+  # volumes:
+    # - "./src:/usr/src/app/src"

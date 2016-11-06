@@ -22,7 +22,6 @@ const controller = {
     });
   },
   syncNotes: function () {
-    console.log(operations);
     $.ajax({
       url: "/api/notes",
       type: "POST",
@@ -30,8 +29,6 @@ const controller = {
       dataType: "json",
       contentType: "application/json; charset=utf-8",
       success: function (newData, err) {
-        console.log(err)
-        console.log(newData);
         data.notes = newData;
       }
     });
@@ -51,8 +48,6 @@ const controller = {
     controller.syncNotes();
   },
   updateNote: function (e, model) {
-    console.log(model)
-    console.log(data.notes[model.index]);
     operations.push({ type: "update", note: data.notes[model.index] });
     controller.syncNotes();
   }

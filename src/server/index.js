@@ -21,7 +21,6 @@ function getNotes (req, res) {
 }
 
 function processNoteUpdateMessages (req, res) {
-  console.log("processing messages");
   var messages = req.body.length;
   if (messages == 0) {
     res.status(200).json({});
@@ -29,7 +28,7 @@ function processNoteUpdateMessages (req, res) {
   }
   console.log(req.body)
   req.body.forEach(function (message) {
-    console.log("processing message");
+    console.log("processing messages!!!!!");
 
     // Case new note
     if (message.type == "add") {
@@ -78,7 +77,6 @@ function processNoteUpdateMessages (req, res) {
 
     // Case other
     } else {
-      console.log("updating")
       Note.findByIdAndUpdate(message.note._id, message.note, {upsert:true}, function(err) {
         console.log(err)
         if (--messages == 0) {

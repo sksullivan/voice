@@ -55,11 +55,12 @@ ul {
 }
 
 ul.note {
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 ul.tags {
   padding-left: 5px;
+  min-height: 24px;
 }
 
 li.note {
@@ -100,6 +101,16 @@ li.add-tag {
   display: inline;
 }
 
+li.filter {
+  cursor: pointer;
+  padding: 4px;
+  display: inline;
+  border: 1px solid #6A7C79;
+  border-radius: 3px;
+  margin: 2px;
+  background-color: #DBFEB8;
+}
+
 .edit-controls {
   float: right;
   position: relative;
@@ -131,8 +142,6 @@ div.note-container {
   padding-left: 11px;
   padding-right: 11px;
   border-radius: 5px;
-  /* margin-right: 5px; */
-  /* margin-bottom: 5px; */
   background-color: #C5EDAC;
 }
 
@@ -142,4 +151,10 @@ div.note-container {
 
 .date {
   font-size: 11px;
+}
+
+.filters {
+  margin-left: -2px;
+  margin-top: 20px;
+  min-height: 24px;
 }

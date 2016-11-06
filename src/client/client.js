@@ -4,6 +4,7 @@ const data = {
   title: 'Welcome to the notebook',
   layoutClass: "col-md-4",
   filters: [],
+  search: "",
   notes: []
 };
 
@@ -12,17 +13,32 @@ var operations = [];
 
 // Custom Rivets Items
 
-rivets.binders.addclass = function(el, value) {
-  if(el.addedClass) {
+rivets.binders["add-class"] = function(el, value) {
+  if (el.addedClass) {
     $(el).removeClass(el.addedClass)
     delete el.addedClass
   }
-
-  if(value) {
+  if (value) {
     $(el).addClass(value)
     el.addedClass = value
   }
 }
+
+rivets.binders['on-enter'] = {
+  bind: function (el) {
+    var rivetsView = this, $el = $(el);
+    $el.on('keyup', function(event) {
+      if(event.keyCode === 13) {
+        $el.blur();
+        rivetsView.observer.value()(event,{ text: $el.val() });
+      }
+    });
+  },
+  unbind: function (el) {
+    $(el).off('keyup');
+  },
+  function: true
+};
 
 rivets.formatters.filterByFilterItems = function(items, filters) {
   return items.filter(function (item) {
@@ -98,9 +114,20 @@ const controller = {
     operations.push({ type: "update", note: data.notes[model.index] });
     controller.syncNotes();
   },
-  applyTextFilter: function (e, model) {
+  applyTextFilterFromTag: function (e, model) {
     data.filters.push(data.notes[model["%note%"]].tags[model["%tag%"]].title);
-    console.log(data.filters);
+  },
+  applyTextFilterFromSearch: function (e, model) {
+    if (data.search != "") {
+      data.filters.push(data.search);
+      $('#search').val("");
+    }
+  },
+  deleteFilter: function (e, model) {
+    data.filters.splice(model.index,1);
+  },
+  clearSearch: function (e, model) {
+    $('#search').val("");
   }
 }
 
@@ -108,7 +135,7 @@ const controller = {
 // Helper Functions
 
 function deepToString(item) {
-  x =  Object.keys(item).map(function (key) {
+  return Object.keys(item).map(function (key) {
     const value = item[key];
     if (typeof value == "string") {
       return value;
@@ -124,8 +151,6 @@ function deepToString(item) {
       return curr + " " + next;
     }
   },"");
-  console.log(x)
-  return x
 }
 
 

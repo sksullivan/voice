@@ -10,24 +10,24 @@
 	<div class="container-fluid" id="content">
     <div class="row">
       <div class="col-md-12">
-        <h1>{ data.title }</h1>
+        <h1 class="pull-left">{ data.title }</h1>
+        <h1 class="pull-right">
+          <a><i class="fa fa-th grid-layout" aria-hidden="true" rv-on-click="controller.viewGrid"></i></a>
+          <a><i class="fa fa-list list-layout" aria-hidden="true" rv-on-click="controller.viewList"></i></a>
+        </h1>
         <input type="text" placeholder="Search file text, tags, etc...">
       </div>
     </div>
     <div class="row">
       <ul class="note col-md-12">
-        <li class="note col-md-4" rv-each-note="data.notes">
+        <li class="note" rv-addclass="data.layoutClass" rv-each-note="data.notes">
           <div class="note-container">
             <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNote"></b>
             <textarea class="note note-text" type="text" rv-value="note.text" rows="10" rv-on-blur="controller.updateNote"></textarea>
             <div class="tags">
               <ul class="tags">
-                <li class="add-tag">
-                  :
-                </li>
-                <li class="tag" rv-each-tag="note.tags">
-                  { tag.title },
-                </li>
+                <li class="add-tag">:</li>
+                <li class="tag" rv-each-tag="note.tags">{ tag.title },</li>
                 <li class="add-tag">
                   <a><i class="fa fa-plus-square" aria-hidden="true"></i></a>
                 </li>

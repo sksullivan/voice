@@ -1,9 +1,22 @@
 const data = {
   title: 'Welcome to the notebook',
+  layoutClass: "col-md-4",
   notes: []
 };
 
 var operations = [];
+
+rivets.binders.addclass = function(el, value) {
+  if(el.addedClass) {
+    $(el).removeClass(el.addedClass)
+    delete el.addedClass
+  }
+
+  if(value) {
+    $(el).addClass(value)
+    el.addedClass = value
+  }
+}
 
 function bindData () {
   operations = [];
@@ -55,7 +68,13 @@ const controller = {
   updateNote: function (e, model) {
     operations.push({ type: "update", note: data.notes[model.index] });
     controller.syncNotes();
-  }
+  },
+  viewGrid: function (e, model) {
+    data.layoutClass = "col-md-4";
+  },
+  viewList: function (e, model) {
+    data.layoutClass = "col-md-12";
+  },
 }
 
 controller.loadNotes();

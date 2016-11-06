@@ -62,7 +62,7 @@ ul.tags {
 }
 
 li.note {
-  border: 3px solid;
+  /*border: 3px solid;*/
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 11px;
@@ -70,7 +70,7 @@ li.note {
   border-radius: 5px;
   /*margin-right: 5px;*/
   /*margin-bottom: 5px;*/
-  background-color: #C5EDAC;
+  /*background-color: #C5EDAC;*/
 }
 
 li.tag {
@@ -83,6 +83,7 @@ li.add-tag {
 
 .edit-controls {
   float: right;
+  position: relative;
 }
 
 a {
@@ -94,10 +95,28 @@ a:hover {
 }
 
 .tags {
-  float: left;
+  width: 100%;
 }
 
 i.add-note {
   margin-top: 38px;
   font-size: 62px;
+}
+
+div.note-container {
+  padding: 5px; */
+  border: 3px solid;
+  border: 3px solid; 
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 11px;
+  padding-right: 11px;
+  border-radius: 5px;
+  /* margin-right: 5px; */
+  /* margin-bottom: 5px; */
+  background-color: #C5EDAC;
+}
+
+.delete-note {
+  float:right;
 }

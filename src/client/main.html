@@ -22,8 +22,8 @@
       <ul class="note col-md-12">
         <li class="note" rv-addclass="data.layoutClass" rv-each-note="data.notes">
           <div class="note-container">
-            <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNote"></b>
-            <textarea class="note note-text" type="text" rv-value="note.text" rows="10" rv-on-blur="controller.updateNote"></textarea>
+            <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNoteData"></b>
+            <p contenteditable="true" class="note note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData"></p>
             <p class="date">{ note.dateCreated }</p>
             <div class="tags">
               <ul class="tags">
@@ -45,7 +45,6 @@
       </ul>
     </div>
   </div>
-
   <script src="rivets.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha256-/5pHDZh2fv1eZImyfiThtB5Ag4LqDjyittT7fLjdT/8=" crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>

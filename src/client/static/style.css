@@ -22,12 +22,12 @@ input {
   width: 100%;
 }
 
-textarea.note, input.note {
+p.note, input.note {
+  white-space: pre-wrap;
   width: 100%;
   background-color: #C5EDAC;
   border-radius: 5px;
   overflow: hidden;
-  resize: none;
   color: #6A7C79;
   border: none;
   user-select: none;
@@ -37,7 +37,7 @@ textarea.note, input.note {
   padding-right: 6px;
 }
 
-textarea.note:focus, input.note:focus {
+p.note:focus, input.note:focus {
   color: #DBFEB8;
   outline: 0;
   background-color: #93B1A7;

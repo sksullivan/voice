@@ -26,10 +26,6 @@ function bindData () {
   );
 }
 
-function reflowNotes () {
-  
-}
-
 const controller = {
   loadNotes: function () {
     $.get("/api/notes",function (newData) {
@@ -47,7 +43,6 @@ const controller = {
       contentType: "application/json; charset=utf-8",
       success: function (newData, err) {
         data.notes = newData;
-        reflowNotes();
       }
     });
     operations = [];
@@ -65,16 +60,21 @@ const controller = {
     operations.push({ type: "add", note: newNote });
     controller.syncNotes();
   },
-  updateNote: function (e, model) {
-    operations.push({ type: "update", note: data.notes[model.index] });
-    controller.syncNotes();
-  },
   viewGrid: function (e, model) {
     data.layoutClass = "col-md-4";
   },
   viewList: function (e, model) {
     data.layoutClass = "col-md-12";
   },
+  updateNoteData: function (e, model) {
+    if (e.target.tagName == "INPUT") {
+      data.notes[model.index].title = e.target.value;
+    } else {
+      data.notes[model.index].text = e.target.innerText;
+    }
+    operations.push({ type: "update", note: data.notes[model.index] });
+    controller.syncNotes();
+  }
 }
 
 controller.loadNotes();

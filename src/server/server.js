@@ -26,7 +26,7 @@ app.use(express.static('dist'));
 
 app.get('/api', index.getInfo);
 app.get('/api/notes', index.getNotes);
-app.post('/api/notes', index.newNotes);
+app.post('/api/notes', index.processNoteUpdateMessages);
 app.post('/api/tags', index.newTags);
 app.get('/api/tags', index.getTags);
 

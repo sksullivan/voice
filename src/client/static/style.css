@@ -1,0 +1,103 @@
+body {
+  background-color: #DBFEB8;
+  font-family: 'Gotham Rounded SSm A','Gotham Rounded SSm B';
+  font-weight: 500;
+  color: #7A918D
+}
+
+.container-fluid {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+input {
+  background-color: unset;
+  border: 3px solid;
+  border-radius: 5px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 11px;
+  padding-right: 11px;
+  width: 100%;
+}
+
+textarea.note, input.note {
+  width: 100%;
+  background-color: #DBFEB8;
+  border-radius: 5px;
+  overflow: hidden;
+  resize: none;
+  color: #6A7C79;
+  border: none;
+  user-select: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+textarea.note:focus, input.note:focus {
+  color: #DBFEB8;
+  outline: 0;
+  background-color: #93B1A7;
+}
+
+.note-title {
+  font-size: 21px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.note {
+  margin-top: 30px;
+}
+
+ul.tags {
+  padding-left: 5px;
+}
+
+li.note {
+  width: 291px;
+  border: 3px solid;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 11px;
+  padding-right: 11px;
+  border-radius: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+li.tag {
+  display: inline;
+}
+
+li.add-tag {
+  display: inline;
+}
+
+.edit-controls {
+  float: right;
+}
+
+a {
+  color: #93B1A7;
+}
+
+a:hover {
+  color: #7A918D;
+}
+
+.tags {
+  float: left;
+}
+
+i.add-note {
+  margin-top: 38px;
+  font-size: 62px;
+}

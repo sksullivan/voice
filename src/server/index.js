@@ -20,48 +20,76 @@ function getNotes (req, res) {
   });
 }
 
-function newNotes (req, res) {
-  console.log("new notes")
-  Note.find({}).remove(function () {
-    var notes = req.body.length;
-    if (notes == 0) {
-      res.status(200).json({});
-      return;
-    }
-    console.log(req.body)
-    req.body.forEach(function (newNoteData) {
-      console.log("processing note "+newNoteData.title)
-      const newNote = new Note({ title: newNoteData.title, text: newNoteData.text });
-      var tags = newNoteData.tags.length;
+function processNoteUpdateMessages (req, res) {
+  console.log("processing messages");
+  var messages = req.body.length;
+  if (messages == 0) {
+    res.status(200).json({});
+    return;
+  }
+  console.log(req.body)
+  req.body.forEach(function (message) {
+    console.log("processing message");
+
+    // Case new note
+    if (message.type == "add") {
+      const newNote = new Note({ title: message.note.title, text: message.note.text });
+      var tags = message.note.tags.length;
       if (tags == 0) {
         newNote.save(function (err, product, count) {
-          if (--notes == 0) {
+          if (--messages == 0) {
             if (err) {
               res.status(500).json(err);
             } else {
-              res.status(200).json(product);
+              getNotes(req,res);
             }
           }
         });
       } else {
-        for (var tagId of newNoteData.tags) {
+        for (var tagId of message.note.tags) {
           Tag.findById(tagId, function (err, tag) {
             newNote.tags.push(tag);
             if (--tags == 0) {
               newNote.save(function (err, product, count) {
-                if (--notes == 0) {
+                if (--messages == 0) {
                   if (err) {
                     res.status(500).json(err);
                   } else {
-                    res.status(200).json(product);
+                    getNotes(req,res);
                   }
                 }
               });
             }
-          })
+          });
         }
       }
-    });
+
+    // Case delete note
+    } else if (message.type == "delete") {
+      Note.findById(message.note._id).remove(function (err) {
+        if (--messages == 0) {
+          if (err) {
+            res.status(500).json(err);
+          } else {
+            getNotes(req,res);
+          }
+        }
+      });
+
+    // Case other
+    } else {
+      console.log("updating")
+      Note.findByIdAndUpdate(message.note._id, message.note, {upsert:true}, function(err) {
+        console.log(err)
+        if (--messages == 0) {
+          if (err) {
+            res.status(500).json(err);
+          } else {
+            getNotes(req,res);
+          }
+        }
+      });
+    }
   });
 }
 
@@ -96,7 +124,7 @@ function newTags (req, res) {
 
 module.exports = {
   getInfo,
-  newNotes,
+  processNoteUpdateMessages,
   getNotes,
   newTags,
   getTags,

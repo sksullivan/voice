@@ -1,52 +1,60 @@
 const data = {
   title: 'Welcome to the notebook',
-  notes: [
-    {
-      title: "Heres a test note",
-      text: "Here's the text. Notice that it's a bit longer than the title.",
-      tags: ["581e5fac647b8a001f0019db"]
-    }
-  ]
+  notes: []
 };
 
-var oldNotes = [];
+var operations = [];
+
+function bindData () {
+  operations = [];
+  return rivets.bind(
+    document.querySelector('#content'),
+    { data: data, controller: controller }
+  );
+}
 
 const controller = {
   loadNotes: function () {
     $.get("/api/notes",function (newData) {
+      console.log(newData);
       data.notes = newData;
-      oldNotes = newData;
-      rivets.bind(
-        document.querySelector('#content'),
-        { data: data, controller: controller }
-      );
+      bindData();
     });
   },
   syncNotes: function () {
-    const newNotes = data.notes;
-    // const newNotes = data.notes.filter(function (note) { return oldNotes.indexOf(note) == -1 })
-    console.log(newNotes.length)
-    console.log(newNotes)
+    console.log(operations);
     $.ajax({
       url: "/api/notes",
       type: "POST",
-      data: JSON.stringify(newNotes),
+      data: JSON.stringify(operations),
       dataType: "json",
       contentType: "application/json; charset=utf-8",
-      success: function (data) {
-        console.log(data);
+      success: function (newData, err) {
+        console.log(err)
+        console.log(newData);
+        data.notes = newData;
       }
     });
+    operations = [];
   },
   deleteNote: function (e, model) {
-    data.notes.splice(model.index,1)
+    operations.push({ type: "delete", note: data.notes[model.index] });
+    controller.syncNotes();
   },
   newNote: function (e, model) {
-    data.notes.push({
+    const newNote = {
       title: "New note",
       text: "Write some nice stuff here!",
       tags: []
-    })
+    };
+    operations.push({ type: "add", note: newNote });
+    controller.syncNotes();
+  },
+  updateNote: function (e, model) {
+    console.log(model)
+    console.log(data.notes[model.index]);
+    operations.push({ type: "update", note: data.notes[model.index] });
+    controller.syncNotes();
   }
 }
 

@@ -17,8 +17,8 @@
     <div class="row">
       <ul class="note col-md-12">
         <li class="note col-md-4" rv-each-note="data.notes">
-          <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.syncNotes"></b>
-          <textarea class="note note-text" type="text" rv-value="note.text" rv-on-blur="controller.syncNotes"></textarea>
+          <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNote"></b>
+          <textarea class="note note-text" type="text" rv-value="note.text" rv-on-blur="controller.updateNote"></textarea>
           <!-- <br> -->
           <div class="tags">
             <ul class="tags">

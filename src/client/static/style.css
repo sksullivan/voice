@@ -121,3 +121,7 @@ div.note-container {
 .delete-note {
   float:right;
 }
+
+.date {
+  font-size: 11px;
+}

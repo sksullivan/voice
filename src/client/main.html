@@ -24,6 +24,7 @@
           <div class="note-container">
             <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNote"></b>
             <textarea class="note note-text" type="text" rv-value="note.text" rows="10" rv-on-blur="controller.updateNote"></textarea>
+            <p class="date">{ note.dateCreated }</p>
             <div class="tags">
               <ul class="tags">
                 <li class="add-tag">:</li>

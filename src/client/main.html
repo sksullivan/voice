@@ -18,7 +18,7 @@
       <ul class="note col-md-12">
         <li class="note col-md-4" rv-each-note="data.notes">
           <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNote"></b>
-          <textarea class="note note-text" type="text" rv-value="note.text" rv-on-blur="controller.updateNote"></textarea>
+          <textarea class="note note-text" type="text" rv-value="note.text" rows="10 " rv-on-blur="controller.updateNote"></textarea>
           <!-- <br> -->
           <div class="tags">
             <ul class="tags">
@@ -35,7 +35,7 @@
             <a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.deleteNote"></i></a>
           </div>
         </li>
-        <li class="col-md-2 col-md-offset-1">
+        <li class="note col-md-4">
           <a><i class="fa fa-plus-square add-note" aria-hidden="true" rv-on-click="controller.newNote"></i></a>
         </li>
       </ul>

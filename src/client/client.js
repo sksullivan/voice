@@ -13,6 +13,10 @@ function bindData () {
   );
 }
 
+function reflowNotes () {
+  
+}
+
 const controller = {
   loadNotes: function () {
     $.get("/api/notes",function (newData) {
@@ -30,6 +34,7 @@ const controller = {
       contentType: "application/json; charset=utf-8",
       success: function (newData, err) {
         data.notes = newData;
+        reflowNotes();
       }
     });
     operations = [];

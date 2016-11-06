@@ -20,7 +20,7 @@
     </div>
     <div class="row">
       <ul class="note col-md-12">
-        <li class="note" rv-addclass="data.layoutClass" rv-each-note="data.notes">
+        <li class="note" rv-addclass="data.layoutClass" rv-each-note="data.notes | filterByFilterItems data.filters">
           <div class="note-container">
             <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNoteData"></b>
             <p contenteditable="true" class="note note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData"></p>
@@ -28,7 +28,7 @@
             <div class="tags">
               <ul class="tags">
                 <li class="add-tag">:</li>
-                <li class="tag" rv-each-tag="note.tags">{ tag.title },</li>
+                <li class="tag" rv-each-tag="note.tags"><a rv-on-click="controller.applyTextFilter">{ tag.title }</a></li>
                 <li class="add-tag">
                   <a><i class="fa fa-plus-square" aria-hidden="true"></i></a>
                 </li>

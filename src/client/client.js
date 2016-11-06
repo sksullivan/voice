@@ -1,10 +1,16 @@
+// Application State
+
 const data = {
   title: 'Welcome to the notebook',
   layoutClass: "col-md-4",
+  filters: [],
   notes: []
 };
 
 var operations = [];
+
+
+// Custom Rivets Items
 
 rivets.binders.addclass = function(el, value) {
   if(el.addedClass) {
@@ -18,6 +24,20 @@ rivets.binders.addclass = function(el, value) {
   }
 }
 
+rivets.formatters.filterByFilterItems = function(items, filters) {
+  return items.filter(function (item) {
+    const itemText = deepToString(item);
+    return filters.map(function (filter) {
+      return itemText.indexOf(filter) != -1;
+    }).reduce(function (prev, curr) {
+      return prev && curr;
+    },true);
+  });
+};
+
+
+// Rivets Operations
+
 function bindData () {
   operations = [];
   return rivets.bind(
@@ -25,6 +45,9 @@ function bindData () {
     { data: data, controller: controller }
   );
 }
+
+
+// Controller methods
 
 const controller = {
   loadNotes: function () {
@@ -74,7 +97,38 @@ const controller = {
     }
     operations.push({ type: "update", note: data.notes[model.index] });
     controller.syncNotes();
+  },
+  applyTextFilter: function (e, model) {
+    data.filters.push(data.notes[model["%note%"]].tags[model["%tag%"]].title);
+    console.log(data.filters);
   }
 }
+
+
+// Helper Functions
+
+function deepToString(item) {
+  x =  Object.keys(item).map(function (key) {
+    const value = item[key];
+    if (typeof value == "string") {
+      return value;
+    } else if (typeof value == "object") {
+      return deepToString(value);
+    } else {
+      return "";
+    }
+  }).reduce(function (curr,next) {
+    if (curr == "" || next == "") {
+      return curr + next;
+    } else {
+      return curr + " " + next;
+    }
+  },"");
+  console.log(x)
+  return x
+}
+
+
+// Application Initialization
 
 controller.loadNotes();

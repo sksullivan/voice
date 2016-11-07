@@ -16,6 +16,8 @@ const config = {
   serverPort: 3000,
 };
 
+app.basicAuth('them', process.env.ROOT_PASS);
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

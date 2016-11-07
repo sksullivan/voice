@@ -23,14 +23,15 @@
         <li class="filter" rv-each-filter="data.filters">{ filter }
           <a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.deleteFilter"></i></a>
         </li>
-        <li class="filter search" rv-hide="data.search == ''">{ data.search }
+        <li class="filter search" rv-show="data.search | eq ''">{ data.search }
           <a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.clearSearch"></i></a>
         </li>
+        <li class="filter pull-right" rv-on-click="controller.clearAll">Clear</li>
       </ul>
     </div>
     <div class="row">
       <ul class="note col-md-12">
-        <li class="note col-xs-12 col-sm-12" rv-add-class="data.layoutClass" rv-each-note="data.notes | filterByFilterItems data.filters">
+        <li class="note col-xs-12 col-sm-12" rv-add-class="data.layoutClass" rv-each-note="data.notes | filterByFilterItems data.filters data.search">
           <div class="note-container">
             <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNoteData"></b>
             <p contenteditable="true" class="note note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData"></p>

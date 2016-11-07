@@ -9,7 +9,7 @@
 <body>
 	<div class="container-fluid" id="content">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-xs-12 col-sm-12 col-md-12">
         <h1 class="pull-left">{ data.title }</h1>
         <h1 class="pull-right">
           <a><i class="fa fa-th grid-layout" aria-hidden="true" rv-on-click="controller.viewGrid"></i></a>
@@ -30,7 +30,7 @@
     </div>
     <div class="row">
       <ul class="note col-md-12">
-        <li class="note" rv-add-class="data.layoutClass" rv-each-note="data.notes | filterByFilterItems data.filters">
+        <li class="note col-xs-12 col-sm-12" rv-add-class="data.layoutClass" rv-each-note="data.notes | filterByFilterItems data.filters">
           <div class="note-container">
             <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNoteData"></b>
             <p contenteditable="true" class="note note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData"></p>

@@ -40,11 +40,13 @@ rivets.binders['on-enter'] = {
   function: true
 };
 
-rivets.formatters.filterByFilterItems = function(items, filters) {
+rivets.formatters.filterByFilterItems = function(items, textFilters, search) {
+  const filters = textFilters.slice();
+  filters.push(search);
   return items.filter(function (item) {
-    const itemText = deepToString(item);
+    const itemText = deepToString(item).toLowerCase();
     return filters.map(function (filter) {
-      return itemText.indexOf(filter) != -1;
+      return itemText.indexOf(filter.toLowerCase()) != -1;
     }).reduce(function (prev, curr) {
       return prev && curr;
     },true);
@@ -120,7 +122,7 @@ const controller = {
   applyTextFilterFromSearch: function (e, model) {
     if (data.search != "") {
       data.filters.push(data.search);
-      $('#search').val("");
+      controller.clearSearch();
     }
   },
   deleteFilter: function (e, model) {
@@ -128,6 +130,13 @@ const controller = {
   },
   clearSearch: function (e, model) {
     $('#search').val("");
+    data.search = "";
+  },
+  clearAll: function () {
+    $('#search').val("");
+    data.search = "";
+    data.filters = [];
+    // data.filters.splice(0,data.filters.length);
   }
 }
 

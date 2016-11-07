@@ -43,6 +43,7 @@ rivets.binders['on-enter'] = {
 rivets.formatters.filterByFilterItems = function(items, textFilters, search) {
   const filters = textFilters.slice();
   filters.push(search);
+  reflowNotes();
   return items.filter(function (item) {
     const itemText = deepToString(item).toLowerCase();
     return filters.map(function (filter) {
@@ -131,11 +132,13 @@ const controller = {
   },
   applyTextFilterFromTag: function (e, model) {
     data.filters.push(data.notes[model["%note%"]].tags[model["%tag%"]].title);
+    reflowNotes();
   },
   applyTextFilterFromSearch: function (e, model) {
     if (data.search != "") {
       data.filters.push(data.search);
       controller.clearSearch();
+      reflowNotes();
     }
   },
   deleteFilter: function (e, model) {
@@ -201,10 +204,10 @@ function pageParams (data) {
 
 function reflowNotes () {
   $('.grid').masonry('reloadItems');
-  $('.note').css('width',$('.grid').width() / data.cols - 20);
+  $('.note').css('width',($(window).width() - 70) / data.cols - 20);
   $('.grid').masonry({
     itemSelector: '.grid-item',
-    columnWidth: $('.grid').width() / data.cols
+    columnWidth: ($(window).width() - 70) / data.cols
   });
 }
 

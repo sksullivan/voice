@@ -55,6 +55,7 @@ ul {
 }
 
 .grid {
+  width: 100%;
   margin-top: 20px;
 }
 
@@ -175,3 +176,7 @@ div.note-container {
 .grid-item {
   transition: left 0.7s, right 0.7s, top 0.7s;
 }*/
+
+@-ms-viewport{
+  width: device-width;
+}

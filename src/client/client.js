@@ -2,7 +2,7 @@
 
 const data = {
   title: 'Welcome to the notebook',
-  layoutClass: "col-md-4",
+  layoutClass: pageParams()['layoutClass'],
   filters: [],
   search: "",
   notes: []
@@ -57,6 +57,7 @@ rivets.formatters.filterByFilterItems = function(items, textFilters, search) {
 // Rivets Operations
 
 function bindData () {
+  console.log(pageParams()['layoutClass']);
   operations = [];
   return rivets.bind(
     document.querySelector('#content'),
@@ -103,9 +104,15 @@ const controller = {
   },
   viewGrid: function (e, model) {
     data.layoutClass = "col-md-4";
+    pageParams({"layoutClass":data.layoutClass});
+  },
+  viewBook: function (e, model) {
+    data.layoutClass = "col-md-6";
+    pageParams({"layoutClass":data.layoutClass});
   },
   viewList: function (e, model) {
     data.layoutClass = "col-md-12";
+    pageParams({"layoutClass":data.layoutClass});
   },
   updateNoteData: function (e, model) {
     if (e.target.tagName == "INPUT") {
@@ -143,7 +150,7 @@ const controller = {
 
 // Helper Functions
 
-function deepToString(item) {
+function deepToString (item) {
   return Object.keys(item).map(function (key) {
     const value = item[key];
     if (typeof value == "string") {
@@ -160,6 +167,31 @@ function deepToString(item) {
       return curr + " " + next;
     }
   },"");
+}
+
+function pageParams (data) {
+  if (data) {
+    const query = Object.keys(data)
+      .map(function (key) {
+        return key + '=' + data[key];
+      }).join('&');
+    const newUrl = window.location.origin + window.location.pathname + '?' + query;
+    window.history.pushState({ url: newUrl }, 'lol', newUrl);
+    return;
+  }
+  if (window.location.href.indexOf('?') != -1) {
+    return window.location.href
+      .split('?')[1]
+      .split('&')
+      .map(function (pair) {
+        return pair.split('=');
+      }).reduce(function (prev, curr) {
+        prev[curr[0]] = curr[1];
+        return prev;
+      },{});
+  } else {
+    return {};
+  }
 }
 
 

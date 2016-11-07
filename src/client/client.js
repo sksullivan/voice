@@ -2,7 +2,7 @@
 
 const data = {
   title: 'Welcome to the notebook',
-  layoutClass: pageParams()['layoutClass'],
+  cols: pageParams()['cols'],
   filters: [],
   search: "",
   notes: []
@@ -74,6 +74,7 @@ const controller = {
       console.log(newData);
       data.notes = newData;
       bindData();
+      reflowNotes();
     });
   },
   syncNotes: function () {
@@ -85,6 +86,7 @@ const controller = {
       contentType: "application/json; charset=utf-8",
       success: function (newData, err) {
         data.notes = newData;
+        reflowNotes();
       }
     });
     operations = [];
@@ -94,6 +96,7 @@ const controller = {
     controller.syncNotes();
   },
   newNote: function (e, model) {
+    console.log("new note");
     const newNote = {
       title: "New note",
       text: "Write some nice stuff here!",
@@ -103,16 +106,19 @@ const controller = {
     controller.syncNotes();
   },
   viewGrid: function (e, model) {
-    data.layoutClass = "col-md-4";
-    pageParams({"layoutClass":data.layoutClass});
+    data.cols = 5;
+    pageParams({"cols":data.cols});
+    reflowNotes();
   },
   viewBook: function (e, model) {
-    data.layoutClass = "col-md-6";
-    pageParams({"layoutClass":data.layoutClass});
+    data.cols = 2;
+    pageParams({"cols":data.cols});
+    reflowNotes();
   },
   viewList: function (e, model) {
-    data.layoutClass = "col-md-12";
-    pageParams({"layoutClass":data.layoutClass});
+    data.cols = 1;
+    pageParams({"cols":data.cols});
+    reflowNotes();
   },
   updateNoteData: function (e, model) {
     if (e.target.tagName == "INPUT") {
@@ -143,7 +149,6 @@ const controller = {
     $('#search').val("");
     data.search = "";
     data.filters = [];
-    // data.filters.splice(0,data.filters.length);
   }
 }
 
@@ -192,6 +197,15 @@ function pageParams (data) {
   } else {
     return {};
   }
+}
+
+function reflowNotes () {
+  $('.grid').masonry('reloadItems');
+  $('.note').css('width',$('.grid').width() / data.cols - 20);
+  $('.grid').masonry({
+    itemSelector: '.grid-item',
+    columnWidth: $('.grid').width() / data.cols
+  });
 }
 
 

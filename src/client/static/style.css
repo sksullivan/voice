@@ -22,12 +22,12 @@ input {
   width: 100%;
 }
 
-p.note, input.note {
+.note p, .note input {
   white-space: pre-wrap;
   width: 100%;
   background-color: #C5EDAC;
   border-radius: 5px;
-  overflow: hidden;
+  /*overflow: hidden;*/
   color: #6A7C79;
   border: none;
   user-select: none;
@@ -37,7 +37,7 @@ p.note, input.note {
   padding-right: 6px;
 }
 
-p.note:focus, input.note:focus {
+.note p:focus, .note input:focus {
   color: #DBFEB8;
   outline: 0;
   background-color: #93B1A7;
@@ -54,8 +54,8 @@ ul {
   margin-left: -10px;
 }
 
-ul.note {
-  margin-top: 10px;
+.grid {
+  margin-top: 20px;
 }
 
 ul.tags {
@@ -158,3 +158,20 @@ div.note-container {
   margin-top: 20px;
   min-height: 24px;
 }
+
+.grid-item { width: 400px; padding-bottom: 10px; }
+.grid-item--width2 { width: 400px; }
+
+.add-note {
+  position: fixed;
+  bottom: 20px;
+  right: 35px;
+}
+
+/*.grid {
+  transition: width 0.7s, height 0.7s;
+}
+
+.grid-item {
+  transition: left 0.7s, right 0.7s, top 0.7s;
+}*/

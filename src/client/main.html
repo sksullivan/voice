@@ -31,11 +31,11 @@
       </ul>
     </div>
     <div class="row">
-      <ul class="note col-md-12">
-        <li class="note col-xs-12 col-sm-12" rv-add-class="data.layoutClass" rv-each-note="data.notes | filterByFilterItems data.filters data.search">
+      <div class="grid col-md-12">
+        <div class="note grid-item" rv-each-note="data.notes | filterByFilterItems data.filters data.search">
           <div class="note-container">
-            <b><input class="note note-title" type="text" rv-value="note.title" rv-on-blur="controller.updateNoteData"></b>
-            <p contenteditable="true" class="note note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData"></p>
+            <b><input class="note-title" type="text" rv-value="note.title" rv-on-enter="controller.updateNoteData" rv-on-blur="controller.updateNoteData"></b>
+            <p contenteditable="true" class="note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData"></p>
             <p class="date">{ note.dateCreated }</p>
             <div class="tags">
               <ul class="tags">
@@ -50,11 +50,11 @@
               </ul>
             </div>
           </div>
-        </li>
-        <li class="note col-md-4">
-          <a><i class="fa fa-plus-square add-note" aria-hidden="true" rv-on-click="controller.newNote"></i></a>
-        </li>
-      </ul>
+        </div>
+      </div>
+      <div class="add-note">
+        <a><i class="fa fa-plus-square add-note" aria-hidden="true" rv-on-click="controller.newNote"></i></a>
+      </div>
     </div>
   </div>
   <script src="rivets.js"></script>
@@ -62,5 +62,6 @@
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
   <script src="https://use.fontawesome.com/75c7cd096f.js"></script>
+  <script src="http://masonry.desandro.com/masonry.pkgd.js"></script>
 </body>
 </html>

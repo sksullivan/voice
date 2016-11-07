@@ -5,6 +5,7 @@ const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const util = require ('util');
+const basicAuth = require('basic-auth-connect');
 
 const store = require('./store');
 const index = require('./index');
@@ -16,8 +17,6 @@ const config = {
   serverPort: 3000,
 };
 
-app.basicAuth('them', process.env.ROOT_PASS);
-
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -25,6 +24,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static('dist'));
+app.use(basicAuth('them', process.env.ROOT_PASS));
 
 app.get('/api', index.getInfo);
 app.get('/api/notes', index.getNotes);

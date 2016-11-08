@@ -2,7 +2,7 @@
 
 const data = {
   title: 'Welcome to the notebook',
-  cols: pageParams()['cols'] || 2,
+  cols: pageParams()['cols'] || 1,
   filters: [],
   search: "",
   notes: []

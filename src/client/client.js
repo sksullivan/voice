@@ -87,9 +87,9 @@ const controller = {
       success: function (newData, err) {
         data.notes = newData;
         reflowNotes();
-        // if (callback) {
-          // callback();
-        // }
+        if (callback) {
+          callback();
+        }
       }
     });
     operations = [];
@@ -99,10 +99,9 @@ const controller = {
     controller.syncNotes();
   },
   newNote: function (e, model) {
-    console.log("new note");
     const newNote = {
-      title: "New note",
-      text: "Write some nice stuff here!",
+      title: "",
+      text: "",
       tags: []
     };
     operations.push({ type: "add", note: newNote });

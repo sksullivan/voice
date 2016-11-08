@@ -35,8 +35,8 @@
       <div class="grid col-md-12">
         <div class="note grid-item" rv-each-note="data.notes | filterByFilterItems data.filters data.search">
           <div class="note-container">
-            <b><input class="note-title" type="text" rv-value="note.title" rv-on-enter="controller.updateNoteData" rv-on-blur="controller.updateNoteData"></b>
-            <p contenteditable="true" class="note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData"></p>
+            <b><input class="note-title" type="text" rv-value="note.title" rv-on-enter="controller.updateNoteData" rv-on-blur="controller.updateNoteData" placeholder="New note"></b>
+            <p contenteditable="true" class="note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData" data-placeholder="Write some nice stuff here!"></p>
             <p class="date">{ note.dateCreated }</p>
             <div class="tags">
               <ul class="tags">

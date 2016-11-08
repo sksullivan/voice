@@ -180,3 +180,21 @@ div.note-container {
 @-ms-viewport{
   width: device-width;
 }
+
+p:empty:not(:focus)::before {
+  content: attr(data-placeholder);
+  color: #6A7C79;
+}
+
+p:focus:empty::before {
+  content: attr(data-placeholder);
+  color: #DBFEB8;
+}
+
+.note-title::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #6A7C79;
+}
+
+.note-title:focus::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #DBFEB8;
+}

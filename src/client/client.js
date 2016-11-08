@@ -2,7 +2,7 @@
 
 const data = {
   title: 'Welcome to the notebook',
-  cols: pageParams()['cols'] || 2,
+  cols: pageParams()['cols'] || 1,
   filters: [],
   search: "",
   notes: []
@@ -58,7 +58,6 @@ rivets.formatters.filterByFilterItems = function(items, textFilters, search) {
 // Rivets Operations
 
 function bindData () {
-  console.log(pageParams()['layoutClass']);
   operations = [];
   return rivets.bind(
     document.querySelector('#content'),
@@ -78,7 +77,7 @@ const controller = {
       reflowNotes();
     });
   },
-  syncNotes: function () {
+  syncNotes: function (callback) {
     $.ajax({
       url: "/api/notes",
       type: "POST",
@@ -88,6 +87,9 @@ const controller = {
       success: function (newData, err) {
         data.notes = newData;
         reflowNotes();
+        // if (callback) {
+          // callback();
+        // }
       }
     });
     operations = [];
@@ -104,7 +106,12 @@ const controller = {
       tags: []
     };
     operations.push({ type: "add", note: newNote });
-    controller.syncNotes();
+    controller.syncNotes(function () {
+      $('.note:last-child').find('input').focus();
+      $('html, body').animate({
+        scrollTop:  $('html').height()
+      }, 2000);
+    });
   },
   viewGrid: function (e, model) {
     data.cols = 5;

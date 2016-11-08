@@ -43,7 +43,7 @@ rivets.binders['on-enter'] = {
 rivets.formatters.filterByFilterItems = function(items, textFilters, search) {
   const filters = textFilters.slice();
   filters.push(search);
-  reflowNotes();
+  reflowNotes()
   return items.filter(function (item) {
     const itemText = deepToString(item).toLowerCase();
     return filters.map(function (filter) {
@@ -149,15 +149,18 @@ const controller = {
   },
   deleteFilter: function (e, model) {
     data.filters.splice(model.index,1);
+    reflowNotes();
   },
   clearSearch: function (e, model) {
     $('#search').val("");
     data.search = "";
+    reflowNotes();
   },
   clearAll: function () {
     $('#search').val("");
     data.search = "";
     data.filters = [];
+    reflowNotes();
   }
 }
 
@@ -209,12 +212,14 @@ function pageParams (data) {
 }
 
 function reflowNotes () {
-  $('.grid').masonry('reloadItems');
-  $('.note').css('width',($(window).width() - 70) / data.cols - 20);
-  $('.grid').masonry({
-    itemSelector: '.grid-item',
-    columnWidth: ($(window).width() - 70) / data.cols
-  });
+  setTimeout(function () {
+    $('.grid').masonry('reloadItems');
+    $('.note').css('width',($(window).width() - 70) / data.cols - 20);
+    $('.grid').masonry({
+      itemSelector: '.grid-item',
+      columnWidth: ($(window).width() - 70) / data.cols
+    });
+  },0);
 }
 
 

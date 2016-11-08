@@ -32,7 +32,7 @@ function processNoteUpdateMessages (req, res) {
 
     // Case new note
     if (message.type == "add") {
-      const newNote = new Note({ title: message.note.title, text: message.note.text });
+      const newNote = new Note({ title: message.note.title, text: message.note.text, dateCreated: Date.now(), dateEdited: Date.now() });
       var tags = message.note.tags.length;
       if (tags == 0) {
         newNote.save(function (err, product, count) {
@@ -77,6 +77,7 @@ function processNoteUpdateMessages (req, res) {
 
     // Case other
     } else {
+      message.note.dateEdited = Date.now()
       Note.findByIdAndUpdate(message.note._id, message.note, {upsert:true}, function(err) {
         console.log(err)
         if (--messages == 0) {

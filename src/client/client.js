@@ -161,6 +161,13 @@ const controller = {
     data.search = "";
     data.filters = [];
     reflowNotes();
+  },
+  keyedNote: function (e, model) {
+    if (e.shiftKey) {
+      if (e.keyCode == 88) {
+        controller.deleteNote(e,model);
+      }
+    }
   }
 }
 
@@ -226,3 +233,32 @@ function reflowNotes () {
 // Application Initialization
 
 controller.loadNotes();
+
+const handleKeys = function (e) {
+  if (e.shiftKey) {
+    if (e.keyCode == 78) { // N
+      controller.newNote();
+    }
+    if (e.keyCode == 83) { // S
+      $('#search').focus();
+      $('html, body').animate({
+        scrollTop: 0
+      }, 2000);
+    }
+    if (e.keyCode == 67) { // C
+      controller.clearAll();
+    }
+    e.preventDefault();
+  }
+
+  var pressed = "";
+  if (e.shiftKey) {
+      pressed += " + Shift";
+  } else if(e.ctrlKey) {
+      pressed += " + Ctrl";
+  }
+  pressed += e.keyCode;
+  console.log(pressed);
+};
+
+window.onkeydown = handleKeys;

@@ -1,8 +1,22 @@
+@import './fonts.css';
+
+$page-back: #DBFEB8;
+$note-back-default: #C5EDAC;
+$border: #7A918D;
+$text-dark: #6A7C79;
+$control: #93B1A7;
+
+//$page-back: #F0A202;
+//$note-back-default: #F18805;
+//$border: #D95D39;
+//$text-dark: #0E1428;
+//$control: #ffffff;
+
 body {
-  background-color: #DBFEB8;
+  background-color: $page-back;
   font-family: 'Gotham Rounded SSm A','Gotham Rounded SSm B';
   font-weight: 500;
-  color: #7A918D
+  color: $border;
 }
 
 .container-fluid {
@@ -13,34 +27,48 @@ body {
 
 input {
   background-color: unset;
+  border: none;
+  user-select: none;
+}
+
+input:focus {
+  outline:0;
+}
+
+input.full-width {
   border: 3px solid;
   border-radius: 5px;
+  width: 100%;
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 11px;
   padding-right: 11px;
-  width: 100%;
 }
 
-.note p, .note input {
+.note p:not(.tag), .note input:not(.tag) {
   white-space: pre-wrap;
   width: 100%;
-  background-color: #C5EDAC;
+  background-color: $note-back-default;
   border-radius: 5px;
-  /*overflow: hidden;*/
-  color: #6A7C79;
+  color: $text-dark;
   border: none;
-  user-select: none;
   padding-top: 2px;
   padding-bottom: 2px;
   padding-left: 6px;
   padding-right: 6px;
 }
 
-.note p:focus, .note input:focus {
-  color: #DBFEB8;
-  outline: 0;
-  background-color: #93B1A7;
+.note p:not(.tag):focus, .note input:not(.tag):focus {
+  color: $page-back;
+  background-color: $control;
+}
+
+.note input.tag {
+  display: inline;
+}
+
+.page-title {
+  color: $text-dark;
 }
 
 .note-title {
@@ -51,7 +79,7 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  margin-left: -10px;
+  /*margin-left: -10px;*/
 }
 
 .grid {
@@ -74,27 +102,27 @@ li.note {
 
 li.tag {
   display: inline;
-  border: 1px solid #6A7C79;
+  border: 1px solid $text-dark;
   border-radius: 3px;
   margin: 2px;
-  background-color: #6A7C79;
+  background-color: $text-dark;
 }
 
 li.tag:hover {
   cursor: pointer;
   display: inline;
-  border: 1px solid #6A7C79;
+  border: 1px solid $text-dark;
   border-radius: 3px;
   margin: 2px;
-  background-color: #C5EDAC;
+  background-color: $note-back-default;
 }
 
 li.tag a {
-  color: #C5EDAC;
+  color: $note-back-default;
 }
 
 li.tag a:hover {
-  color: #6A7C79;
+  color: $text-dark;
   text-decoration: none;
 }
 
@@ -106,10 +134,11 @@ li.filter {
   cursor: pointer;
   padding: 4px;
   display: inline;
-  border: 1px solid #6A7C79;
+  /*border: 1px solid $border;*/
+  color: $note-back-default;
   border-radius: 3px;
   margin: 2px;
-  background-color: #DBFEB8;
+  background-color: $border;
 }
 
 .edit-controls {
@@ -118,11 +147,11 @@ li.filter {
 }
 
 a {
-  color: #93B1A7;
+  color: $control;
 }
 
 a:hover {
-  color: #7A918D;
+  color: $border;;
 }
 
 .tags {
@@ -135,7 +164,7 @@ i.add-note {
 }
 
 div.note-container {
-  padding: 5px; */
+  padding: 5px;
   border: 3px solid;
   border: 3px solid; 
   padding-top: 7px;
@@ -143,7 +172,7 @@ div.note-container {
   padding-left: 11px;
   padding-right: 11px;
   border-radius: 5px;
-  background-color: #C5EDAC;
+  background-color: $note-back-default;
 }
 
 .delete-note {
@@ -169,32 +198,24 @@ div.note-container {
   right: 35px;
 }
 
-/*.grid {
-  transition: width 0.7s, height 0.7s;
-}
-
-.grid-item {
-  transition: left 0.7s, right 0.7s, top 0.7s;
-}*/
-
 @-ms-viewport{
   width: device-width;
 }
 
 p:empty:not(:focus)::before {
   content: attr(data-placeholder);
-  color: #6A7C79;
+  color: $text-dark;
 }
 
 p:focus:empty::before {
   content: attr(data-placeholder);
-  color: #DBFEB8;
+  color: $page-back;
 }
 
-.note-title::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: #6A7C79;
+.note-title::-webkit-input-placeholder {
+  color: $text-dark;
 }
 
-.note-title:focus::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: #DBFEB8;
+.note-title:focus::-webkit-input-placeholder {
+  color: $page-back;
 }

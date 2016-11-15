@@ -1,3 +1,5 @@
+require('./styles/stylesheet.scss');
+
 // Application State
 
 const data = {
@@ -13,14 +15,14 @@ var operations = [];
 
 // Custom Rivets Items
 
-rivets.binders["add-class"] = function(el, value) {
+rivets.binders['add-class'] = function(el, value) {
   if (el.addedClass) {
-    $(el).removeClass(el.addedClass)
-    delete el.addedClass
+    $(el).removeClass(el.addedClass);
+    delete el.addedClass;
   }
   if (value) {
-    $(el).addClass(value)
-    el.addedClass = value
+    $(el).addClass(value);
+    el.addedClass = value;
   }
 }
 
@@ -28,9 +30,9 @@ rivets.binders['on-enter'] = {
   bind: function (el) {
     var rivetsView = this, $el = $(el);
     $el.on('keyup', function(event) {
-      if(event.keyCode === 13) {
+      if(event.keyCode == 13) {
         $el.blur();
-        rivetsView.observer.value()(event,{ text: $el.val() });
+        rivetsView.observer.value()(event,rivetsView.model);
       }
     });
   },
@@ -70,7 +72,7 @@ function bindData () {
 
 const controller = {
   loadNotes: function () {
-    $.get("/api/notes",function (newData) {
+    $.get('/api/notes',function (newData) {
       console.log(newData);
       data.notes = newData;
       bindData();
@@ -79,11 +81,11 @@ const controller = {
   },
   syncNotes: function (callback) {
     $.ajax({
-      url: "/api/notes",
-      type: "POST",
+      url: '/api/notes',
+      type: 'POST',
       data: JSON.stringify(operations),
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
       success: function (newData, err) {
         data.notes = newData;
         reflowNotes();
@@ -95,16 +97,16 @@ const controller = {
     operations = [];
   },
   deleteNote: function (e, model) {
-    operations.push({ type: "delete", note: data.notes[model.index] });
+    operations.push({ type: 'delete', note: data.notes[model.index] });
     controller.syncNotes();
   },
   newNote: function (e, model) {
     const newNote = {
-      title: "",
-      text: "",
+      title: '',
+      text: '',
       tags: []
     };
-    operations.push({ type: "add", note: newNote });
+    operations.push({ type: 'add', note: newNote });
     controller.syncNotes(function () {
       $('.note:last-child').find('input').focus();
       $('html, body').animate({
@@ -119,29 +121,29 @@ const controller = {
   },
   viewBook: function (e, model) {
     data.cols = 2;
-    pageParams({"cols":data.cols});
+    pageParams({ 'cols':data.cols });
     reflowNotes();
   },
   viewList: function (e, model) {
     data.cols = 1;
-    pageParams({"cols":data.cols});
+    pageParams({ 'cols':data.cols });
     reflowNotes();
   },
   updateNoteData: function (e, model) {
-    if (e.target.tagName == "INPUT") {
+    if (e.target.tagName == 'INPUT') {
       data.notes[model.index].title = e.target.value;
     } else {
       data.notes[model.index].text = e.target.innerText;
     }
-    operations.push({ type: "update", note: data.notes[model.index] });
+    operations.push({ type: 'update', note: data.notes[model.index] });
     controller.syncNotes();
   },
   applyTextFilterFromTag: function (e, model) {
-    data.filters.push(data.notes[model["%note%"]].tags[model["%tag%"]].title);
+    data.filters.push(data.notes[model['%note%']].tags[model['%tag%']].title);
     reflowNotes();
   },
   applyTextFilterFromSearch: function (e, model) {
-    if (data.search != "") {
+    if (data.search != '') {
       data.filters.push(data.search);
       controller.clearSearch();
       reflowNotes();
@@ -152,15 +154,37 @@ const controller = {
     reflowNotes();
   },
   clearSearch: function (e, model) {
-    $('#search').val("");
-    data.search = "";
+    $('#search').val('');
+    data.search = '';
     reflowNotes();
   },
   clearAll: function () {
-    $('#search').val("");
-    data.search = "";
+    $('#search').val('');
+    data.search = '';
     data.filters = [];
     reflowNotes();
+  },
+  addTag: function (e, model) {
+    data.notes[model.index].tags.push({ title: '' });
+    operations.push({ type: 'update', note: data.notes[model.index] });
+    controller.syncNotes();
+    console.log("adding tag");
+  },
+  updateTagData: function (e, model) {
+    console.log(model)
+    console.log(model['%note%']);
+    if (model['%note%'] !== undefined) {
+      console.log("set tag title");
+      data.notes[model['%note%']].tags[model['%tag%']].title = e.target.value;
+      operations.push({ type: 'update', note: data.notes[model.index] });
+      controller.syncNotes();
+    } else {
+      console.log("not setting tag data")
+    }
+    console.log(data.notes);
+  },
+  deleteTag: function (e, model) {
+
   }
 }
 
@@ -170,20 +194,20 @@ const controller = {
 function deepToString (item) {
   return Object.keys(item).map(function (key) {
     const value = item[key];
-    if (typeof value == "string") {
+    if (typeof value == 'string') {
       return value;
-    } else if (typeof value == "object") {
+    } else if (typeof value == 'object') {
       return deepToString(value);
     } else {
-      return "";
+      return '';
     }
   }).reduce(function (curr,next) {
-    if (curr == "" || next == "") {
+    if (curr == '' || next == '') {
       return curr + next;
     } else {
-      return curr + " " + next;
+      return curr + ' ' + next;
     }
-  },"");
+  },'');
 }
 
 function pageParams (data) {

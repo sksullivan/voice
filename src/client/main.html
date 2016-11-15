@@ -2,9 +2,7 @@
 <head>
 	<title>Take some notes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="fonts.css" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
-  <link href="style.css" rel="stylesheet">
 	<link rel="icon" type="image/png" href="/favicon.png">
 </head>
 <body>
@@ -17,7 +15,7 @@
           <a><i class="fa fa-th-large list-layout" aria-hidden="true" rv-on-click="controller.viewBook"></i></a>
           <a><i class="fa fa-list list-layout" aria-hidden="true" rv-on-click="controller.viewList"></i></a>
         </h1>
-        <input id="search" type="text" rv-on-enter="controller.applyTextFilterFromSearch" rv-value="data.search" placeholder="Search file text, tags, etc...">
+        <input id="search" class="full-width" type="text" rv-on-enter="controller.applyTextFilterFromSearch" rv-value="data.search" placeholder="Search file text, tags, etc...">
       </div>
     </div>
     <div class="row">
@@ -35,15 +33,17 @@
       <div class="grid col-md-12">
         <div class="note grid-item" rv-each-note="data.notes | filterByFilterItems data.filters data.search">
           <div class="note-container">
-            <b><input class="note-title" type="text" rv-value="note.title" rv-on-enter="controller.updateNoteData" rv-on-blur="controller.updateNoteData" placeholder="New note"></b>
+            <b><input class="note-title full-width" type="text" rv-value="note.title" rv-on-enter="controller.updateNoteData" rv-on-blur="controller.updateNoteData" placeholder="New note"></b>
             <p contenteditable="true" class="note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData" data-placeholder="Write some nice stuff here!"></p>
             <p class="date">{ note.dateCreated }</p>
             <div class="tags">
               <ul class="tags">
-                <li class="add-tag"></li>
-                <li class="tag" rv-each-tag="note.tags"><a rv-on-click="controller.applyTextFilterFromTag">{ tag.title }</a></li>
+<!--                 <li class="add-tag"></li> -->
+                <li class="tag" rv-each-tag="note.tags">
+                  <input class="tag" type="text" rv-value="tag.title" rv-on-enter="controller.updateTagData" rv-on-blur="controller.updateTagData" placeholder="tag"><a><i class="fa fa-search" aria-hidden="true" rv-on-click="controller.applyTextFilterFromTag"></i></a><a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.deleteTag"></i></a>
+                </li>
                 <li class="add-tag">
-                  <a><i class="fa fa-plus-square" aria-hidden="true"></i></a>
+                  <a><i class="fa fa-plus-square" aria-hidden="true" rv-on-click="controller.addTag"></i></a>
                 </li>
                 <li class="delete-note">
                   <a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.deleteNote"></i></a>

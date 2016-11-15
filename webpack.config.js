@@ -1,6 +1,7 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   target: 'node',
@@ -23,7 +24,14 @@ module.exports = {
       { test: /\.md$/, loader: 'ignore-loader' },
       { test: /LICENSE$/, loader: 'ignore-loader' },
       { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.(jpg|png|ico)$/, loader: 'file?name=[path][name].[hash].[ext]' }
+      { test: /\.(jpg|png|ico)$/, loader: 'file?name=[path][name].[hash].[ext]' },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract(
+          'style', // backup loader when not building .css file
+          'css!sass' // loaders to preprocess CSS
+        )
+      }
     ]
   },
   externals: [
@@ -38,7 +46,8 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
         { from: './src/client/static' }
-    ])
+    ]),
+    new ExtractTextPlugin('[name].css'),
   ],
   // target: "node-webkit"
 }

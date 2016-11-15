@@ -108,7 +108,8 @@ const controller = {
     };
     operations.push({ type: 'add', note: newNote });
     controller.syncNotes(function () {
-      $('.note:last-child').find('input').focus();
+      const newNoteEl = $('.note:last-child');
+      newNoteEl.find('input').focus();
       $('html, body').animate({
         scrollTop:  $('html').height()
       }, 2000);
@@ -167,23 +168,27 @@ const controller = {
   addTag: function (e, model) {
     data.notes[model.index].tags.push({ title: '' });
     operations.push({ type: 'update', note: data.notes[model.index] });
-    controller.syncNotes();
-    console.log("adding tag");
+    controller.syncNotes(function () {
+      const newTag = $($('.note-container')[model.index])
+        .find('p')
+        .last();
+      newTag.attr('contenteditable','true');
+      newTag.focus();
+      newTag.select();
+    });
   },
   updateTagData: function (e, model) {
-    console.log(model)
-    console.log(model['%note%']);
     if (model['%note%'] !== undefined) {
-      console.log("set tag title");
-      data.notes[model['%note%']].tags[model['%tag%']].title = e.target.value;
+      $(e.target).attr('contenteditable','false');
+      data.notes[model['%note%']].tags[model['%tag%']].title = e.target.innerText.replace(/\n/g,'');
       operations.push({ type: 'update', note: data.notes[model.index] });
       controller.syncNotes();
-    } else {
-      console.log("not setting tag data")
     }
-    console.log(data.notes);
   },
   deleteTag: function (e, model) {
+    data.notes[model['%note%']].tags.splice(model['%tag%'],1);
+    operations.push({ type: 'update', note: data.notes[model['%note%']] });
+    controller.syncNotes();
   },
   keyedNote: function (e, model) {
     if (e.shiftKey) {

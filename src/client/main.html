@@ -38,9 +38,8 @@
             <p class="date">{ note.dateCreated }</p>
             <div class="tags">
               <ul class="tags">
-<!--                 <li class="add-tag"></li> -->
                 <li class="tag" rv-each-tag="note.tags">
-                  <input class="tag" type="text" rv-value="tag.title" rv-on-enter="controller.updateTagData" rv-on-blur="controller.updateTagData" placeholder="tag"><a><i class="fa fa-search" aria-hidden="true" rv-on-click="controller.applyTextFilterFromTag"></i></a><a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.deleteTag"></i></a>
+                  <p contenteditable="false" class="tag" type="text" rv-text="tag.title" rv-on-enter="controller.updateTagData" rv-on-blur="controller.updateTagData" rv-on-click="controller.applyTextFilterFromTag" data-placeholder="tag name"></p><a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.deleteTag"></i></a>
                 </li>
                 <li class="add-tag">
                   <a><i class="fa fa-plus-square" aria-hidden="true" rv-on-click="controller.addTag"></i></a>

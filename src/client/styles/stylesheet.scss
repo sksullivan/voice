@@ -31,7 +31,7 @@ input {
   user-select: none;
 }
 
-input:focus {
+input:focus, p:focus {
   outline:0;
 }
 
@@ -79,7 +79,6 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  /*margin-left: -10px;*/
 }
 
 .grid {
@@ -101,7 +100,7 @@ li.note {
 }
 
 li.tag {
-  display: inline;
+  display: inline-block;
   border: 1px solid $text-dark;
   border-radius: 3px;
   margin: 2px;
@@ -110,20 +109,24 @@ li.tag {
 
 li.tag:hover {
   cursor: pointer;
-  display: inline;
-  border: 1px solid $text-dark;
-  border-radius: 3px;
-  margin: 2px;
-  background-color: $note-back-default;
 }
 
 li.tag a {
   color: $note-back-default;
+  margin-right: 4px;
 }
 
 li.tag a:hover {
-  color: $text-dark;
+  color: $control;
   text-decoration: none;
+}
+
+li p.tag {
+  display: inline;
+  user-select: none;
+  color: $note-back-default;
+  margin-right: 3px;
+  padding-left: 4px;
 }
 
 li.add-tag {
@@ -134,7 +137,6 @@ li.filter {
   cursor: pointer;
   padding: 4px;
   display: inline;
-  /*border: 1px solid $border;*/
   color: $note-back-default;
   border-radius: 3px;
   margin: 2px;
@@ -151,7 +153,15 @@ a {
 }
 
 a:hover {
-  color: $border;;
+  color: $border;
+}
+
+.tag a, .filter a {
+  color: $note-back-default;
+}
+
+.tag a:hover, .filter a:hover {
+  color: $control;
 }
 
 .tags {
@@ -210,6 +220,10 @@ p:empty:not(:focus)::before {
 p:focus:empty::before {
   content: attr(data-placeholder);
   color: $page-back;
+}
+
+p.tag:empty:not(:focus)::before {
+  color: $note-back-default;
 }
 
 .note-title::-webkit-input-placeholder {

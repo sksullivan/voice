@@ -2,12 +2,25 @@ require('./styles/stylesheet.scss');
 
 // Application State
 
-const data = {
+const model = {
   title: 'Welcome to the notebook',
   cols: pageParams()['cols'] || 1,
   filters: [],
   search: "",
   notes: []
+};
+
+const state = {
+  hiddenTags: [],
+  collapsedNotes: [],
+  filters: [],
+  search: "",
+  cols: []
+};
+
+const data = {
+  model,
+  state
 };
 
 var operations = [];
@@ -72,9 +85,10 @@ function bindData () {
 
 const controller = {
   loadNotes: function () {
+    console.log("Loading notes...");
     $.get('/api/notes',function (newData) {
       console.log(newData);
-      data.notes = newData;
+      data.model.notes = newData;
       bindData();
       reflowNotes();
     });
@@ -87,7 +101,7 @@ const controller = {
       dataType: 'json',
       contentType: 'application/json; charset=utf-8',
       success: function (newData, err) {
-        data.notes = newData;
+        data.model.notes = newData;
         reflowNotes();
         if (callback) {
           callback();
@@ -97,7 +111,7 @@ const controller = {
     operations = [];
   },
   deleteNote: function (e, model) {
-    operations.push({ type: 'delete', note: data.notes[model.index] });
+    operations.push({ type: 'delete', note: data.model.notes[model.index] });
     controller.syncNotes();
   },
   newNote: function (e, model) {
@@ -116,58 +130,58 @@ const controller = {
     });
   },
   viewGrid: function (e, model) {
-    data.cols = 5;
-    pageParams({"cols":data.cols});
+    data.state.cols = 5;
+    pageParams({ "cols": data.state.cols });
     reflowNotes();
   },
   viewBook: function (e, model) {
-    data.cols = 2;
-    pageParams({ 'cols':data.cols });
+    data.state.cols = 2;
+    pageParams({ 'cols': data.state.cols });
     reflowNotes();
   },
   viewList: function (e, model) {
-    data.cols = 1;
-    pageParams({ 'cols':data.cols });
+    data.state.cols = 1;
+    pageParams({ 'cols': data.state.cols });
     reflowNotes();
   },
   updateNoteData: function (e, model) {
     if (e.target.tagName == 'INPUT') {
-      data.notes[model.index].title = e.target.value;
+      data.model.notes[model.index].title = e.target.value;
     } else {
-      data.notes[model.index].text = e.target.innerText;
+      data.model.notes[model.index].text = e.target.innerText;
     }
-    operations.push({ type: 'update', note: data.notes[model.index] });
+    operations.push({ type: 'update', note: data.model.notes[model.index] });
     controller.syncNotes();
   },
   applyTextFilterFromTag: function (e, model) {
-    data.filters.push(data.notes[model['%note%']].tags[model['%tag%']].title);
+    data.state.filters.push(data.model.notes[model['%note%']].tags[model['%tag%']].title);
     reflowNotes();
   },
   applyTextFilterFromSearch: function (e, model) {
-    if (data.search != '') {
-      data.filters.push(data.search);
+    if (data.state.search != '') {
+      data.state.filters.push(data.state.search);
       controller.clearSearch();
       reflowNotes();
     }
   },
   deleteFilter: function (e, model) {
-    data.filters.splice(model.index,1);
+    data.state.filters.splice(model.index,1);
     reflowNotes();
   },
   clearSearch: function (e, model) {
     $('#search').val('');
-    data.search = '';
+    data.state.search = '';
     reflowNotes();
   },
   clearAll: function () {
     $('#search').val('');
-    data.search = '';
-    data.filters = [];
+    data.state.search = '';
+    data.state.filters = [];
     reflowNotes();
   },
   addTag: function (e, model) {
-    data.notes[model.index].tags.push({ title: '' });
-    operations.push({ type: 'update', note: data.notes[model.index] });
+    data.model.notes[model.index].tags.push({ title: '' });
+    operations.push({ type: 'update', note: data.model.notes[model.index] });
     controller.syncNotes(function () {
       const newTag = $($('.note-container')[model.index])
         .find('p')
@@ -180,14 +194,14 @@ const controller = {
   updateTagData: function (e, model) {
     if (model['%note%'] !== undefined) {
       $(e.target).attr('contenteditable','false');
-      data.notes[model['%note%']].tags[model['%tag%']].title = e.target.innerText.replace(/\n/g,'');
-      operations.push({ type: 'update', note: data.notes[model.index] });
+      data.model.notes[model['%note%']].tags[model['%tag%']].title = e.target.innerText.replace(/\n/g,'');
+      operations.push({ type: 'update', note: data.model.notes[model.index] });
       controller.syncNotes();
     }
   },
   deleteTag: function (e, model) {
-    data.notes[model['%note%']].tags.splice(model['%tag%'],1);
-    operations.push({ type: 'update', note: data.notes[model['%note%']] });
+    data.model.notes[model['%note%']].tags.splice(model['%tag%'],1);
+    operations.push({ type: 'update', note: data.model.notes[model['%note%']] });
     controller.syncNotes();
   },
   keyedNote: function (e, model) {
@@ -249,10 +263,10 @@ function pageParams (data) {
 function reflowNotes () {
   setTimeout(function () {
     $('.grid').masonry('reloadItems');
-    $('.note').css('width',($(window).width() - 70) / data.cols - 20);
+    $('.note').css('width',($(window).width() - 70) / data.state.cols - 20);
     $('.grid').masonry({
       itemSelector: '.grid-item',
-      columnWidth: ($(window).width() - 70) / data.cols
+      columnWidth: ($(window).width() - 70) / data.state.cols
     });
   },0);
 }

@@ -263,30 +263,24 @@ function reflowNotes () {
 controller.loadNotes();
 
 const handleKeys = function (e) {
-  if (e.shiftKey) {
+  if (e.altKey) {
     if (e.keyCode == 78) { // N
       controller.newNote();
+      e.preventDefault();
     }
     if (e.keyCode == 83) { // S
       $('#search').focus();
       $('html, body').animate({
         scrollTop: 0
       }, 2000);
+      e.preventDefault();
     }
     if (e.keyCode == 67) { // C
       controller.clearAll();
+      e.preventDefault();
     }
-    e.preventDefault();
   }
-
-  var pressed = "";
-  if (e.shiftKey) {
-      pressed += " + Shift";
-  } else if(e.ctrlKey) {
-      pressed += " + Ctrl";
-  }
-  pressed += e.keyCode;
-  console.log(pressed);
+  console.log(e.keyCode);
 };
 
 window.onkeydown = handleKeys;

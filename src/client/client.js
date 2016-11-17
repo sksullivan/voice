@@ -15,7 +15,7 @@ const state = {
   collapsedNotes: [],
   filters: [],
   search: "",
-  cols: []
+  cols: 1
 };
 
 const data = {
@@ -23,12 +23,14 @@ const data = {
   state
 };
 
-var operations = [];
+var modelOperations = [];
+var stateOperations = [];
 
+var states = [];
 
 // Custom Rivets Items
 
-rivets.binders['add-class'] = function(el, value) {
+rivets.binders['add-class'] = function (el, value) {
   if (el.addedClass) {
     $(el).removeClass(el.addedClass);
     delete el.addedClass;
@@ -55,7 +57,7 @@ rivets.binders['on-enter'] = {
   function: true
 };
 
-rivets.formatters.filterByFilterItems = function(items, textFilters, search) {
+rivets.formatters.filterByFilterItems = function (items, textFilters, search) {
   const filters = textFilters.slice();
   filters.push(search);
   reflowNotes()
@@ -73,7 +75,7 @@ rivets.formatters.filterByFilterItems = function(items, textFilters, search) {
 // Rivets Operations
 
 function bindData () {
-  operations = [];
+  modelOperations = [];
   return rivets.bind(
     document.querySelector('#content'),
     { data: data, controller: controller }
@@ -97,7 +99,7 @@ const controller = {
     $.ajax({
       url: '/api/notes',
       type: 'POST',
-      data: JSON.stringify(operations),
+      data: JSON.stringify(modelOperations),
       dataType: 'json',
       contentType: 'application/json; charset=utf-8',
       success: function (newData, err) {
@@ -108,10 +110,10 @@ const controller = {
         }
       }
     });
-    operations = [];
+    modelOperations = [];
   },
   deleteNote: function (e, model) {
-    operations.push({ type: 'delete', note: data.model.notes[model.index] });
+    modelOperations.push({ type: 'delete', note: data.model.notes[model.index] });
     controller.syncNotes();
   },
   newNote: function (e, model) {
@@ -120,7 +122,7 @@ const controller = {
       text: '',
       tags: []
     };
-    operations.push({ type: 'add', note: newNote });
+    modelOperations.push({ type: 'add', note: newNote });
     controller.syncNotes(function () {
       const newNoteEl = $('.note:last-child');
       newNoteEl.find('input').focus();
@@ -150,7 +152,7 @@ const controller = {
     } else {
       data.model.notes[model.index].text = e.target.innerText;
     }
-    operations.push({ type: 'update', note: data.model.notes[model.index] });
+    modelOperations.push({ type: 'update', note: data.model.notes[model.index] });
     controller.syncNotes();
   },
   applyTextFilterFromTag: function (e, model) {
@@ -181,7 +183,7 @@ const controller = {
   },
   addTag: function (e, model) {
     data.model.notes[model.index].tags.push({ title: '' });
-    operations.push({ type: 'update', note: data.model.notes[model.index] });
+    modelOperations.push({ type: 'update', note: data.model.notes[model.index] });
     controller.syncNotes(function () {
       const newTag = $($('.note-container')[model.index])
         .find('p')
@@ -195,13 +197,13 @@ const controller = {
     if (model['%note%'] !== undefined) {
       $(e.target).attr('contenteditable','false');
       data.model.notes[model['%note%']].tags[model['%tag%']].title = e.target.innerText.replace(/\n/g,'');
-      operations.push({ type: 'update', note: data.model.notes[model.index] });
+      modelOperations.push({ type: 'update', note: data.model.notes[model.index] });
       controller.syncNotes();
     }
   },
   deleteTag: function (e, model) {
     data.model.notes[model['%note%']].tags.splice(model['%tag%'],1);
-    operations.push({ type: 'update', note: data.model.notes[model['%note%']] });
+    modelOperations.push({ type: 'update', note: data.model.notes[model['%note%']] });
     controller.syncNotes();
   },
   keyedNote: function (e, model) {
@@ -209,6 +211,18 @@ const controller = {
       if (e.keyCode == 88) {
         controller.deleteNote(e,model);
       }
+    }
+  },
+  syncState: function () {
+    for (const operation of stateOperations) {
+      states.push(data.state);
+      data.state = operation(data.state);
+    }
+    stateOperations = [];
+  },
+  popState: function () {
+    if (states.length > 0) {
+      data.state = states.pop();
     }
   }
 }
@@ -298,3 +312,66 @@ const handleKeys = function (e) {
 };
 
 window.onkeydown = handleKeys;
+
+window.testAbsoluteMutation = function () {
+  const operation = {
+    mutate: function (state) {
+      const newState = JSON.parse(JSON.stringify(state));
+      newState.cols = 3;
+      this.reverseMutate = function (newState) {
+        const prevState = JSON.parse(JSON.stringify(newState));
+        prevState.cols = state.cols;
+        return prevState;
+      }
+      return newState;
+    },
+    reverseMutate: function (newState) {
+      throw new Error("Can't reverse mutation without defining mutation.");
+    }
+  }
+  stateOperations.push(operation.mutate);
+  controller.syncState();
+  console.log(states)
+}
+
+window.testRelativeMutation = function () {
+  const operation = {
+    mutate: function (state) {
+      console.log(state.cols)
+      const newState = JSON.parse(JSON.stringify(state));
+      newState.cols = state.cols + 1;
+      return newState;
+    },
+    reverseMutate: function (newState) {
+      const prevState = JSON.parse(JSON.stringify(newState));
+      prevState.cols = newState.cols - 1;
+      return prevState;
+    }
+  }
+  stateOperations.push(operation.mutate);
+  controller.syncState();
+  console.log(states)
+}
+
+window.testRelativeReverseMutation = function () {
+  const operation = {
+    mutate: function (state) {
+      console.log(state.cols)
+      const newState = JSON.parse(JSON.stringify(state));
+      newState.cols = state.cols + 1;
+      return newState;
+    },
+    reverseMutate: function (newState) {
+      const prevState = JSON.parse(JSON.stringify(newState));
+      prevState.cols = newState.cols - 1;
+      return prevState;
+    }
+  }
+  stateOperations.push(operation.reverseMutate);
+  controller.syncState();
+  console.log(states)
+}
+
+window.testUndo = function () {
+  controller.popState();
+}

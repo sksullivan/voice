@@ -7,7 +7,7 @@ module.exports = {
   target: 'node',
   entry: {
     server: './src/server/server.js',
-    client: './src/client/client.js'
+    client: './src/client/init.js'
   },
   output: {
     path: './dist',
@@ -19,8 +19,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.ts$/, loader: 'babel-loader?presets[]=es2015!ts-loader' },
-      // { test: /\.js$/, loader: 'babel-loader?presets[]=es2015!' },
+      { test: /\.js$/, exclude: './node_modules', loader: 'babel-loader?presets[]=es2015' },
       { test: /\.md$/, loader: 'ignore-loader' },
       { test: /LICENSE$/, loader: 'ignore-loader' },
       { test: /\.json$/, loader: 'json-loader' },

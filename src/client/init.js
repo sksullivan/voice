@@ -10,6 +10,8 @@ const controller = require('./js/controller');
 const pageParams = require('./js/helpers').pageParams;
 const data = require('./js/models').data;
 
+require('./js/custom-rivets.js');
+
 controller.loadNotes();
 
 data.state.cols = pageParams()['cols'] || 1;

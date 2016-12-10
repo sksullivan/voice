@@ -23,10 +23,10 @@ const data = {
   state
 };
 
-var modelOperationsQueue = [];
-var stateOperationsQueue = [];
+const modelOperationsQueue = [];
+const stateOperationsQueue = [];
 
-var stateHistory = [];
+const stateHistory = [];
 
 module.exports = {
   data,

@@ -2,7 +2,6 @@
 
 const deepToString = require('./helpers').deepToString;
 
-
 // Custom Rivets Items
 
 rivets.binders['add-class'] = function (el, value) {
@@ -20,9 +19,11 @@ rivets.binders['on-enter'] = {
   bind: function (el) {
     var rivetsView = this, $el = $(el);
     $el.on('keyup', function(event) {
-      if(event.keyCode == 13) {
+      console.log("what");
+      if (event.keyCode == 13) {
         $el.blur();
-        rivetsView.observer.value()(event,rivetsView.model);
+        console.log("trace")
+        rivetsView.observer.value()(event,rivetsView.observer.obj);
       }
     });
   },
@@ -35,7 +36,6 @@ rivets.binders['on-enter'] = {
 rivets.formatters.filterByFilterItems = function (items, textFilters, search) {
   const filters = textFilters.slice();
   filters.push(search);
-  reflowNotes()
   return items.filter(function (item) {
     const itemText = deepToString(item).toLowerCase();
     return filters.map(function (filter) {

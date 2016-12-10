@@ -1,9 +1,9 @@
 'use strict';
 
-const data =  require('./models').data;
-const stateOperationsQueue =  require('./models').stateOperationsQueue;
-const modelOperationsQueue =  require('./models').modelOperationsQueue;
-const stateHistory =  require('./models').stateHistory;
+const data = require('./models').data;
+const stateOperationsQueue = require('./models').stateOperationsQueue;
+const modelOperationsQueue = require('./models').modelOperationsQueue;
+const stateHistory = require('./models').stateHistory;
 
 const reflowNotes = require('./helpers').reflowNotes;
 const pageParams = require('./helpers').pageParams;
@@ -66,32 +66,38 @@ const controller = {
     });
   },
   viewGrid: function (e, model) {
-    stateOperationsQueue.push(operations.setColumns(3).mutate);
+    stateOperationsQueue.push(operations.setColumns(3));
     controller.syncState();
-    reflowNotes(data.state.cols);
   },
   viewBook: function (e, model) {
-    stateOperationsQueue.push(operations.setColumns(2).mutate);
+    stateOperationsQueue.push(operations.setColumns(2));
     controller.syncState();
-    reflowNotes(data.state.cols);
   },
   viewList: function (e, model) {
-    stateOperationsQueue.push(operations.setColumns(1).mutate);
+    stateOperationsQueue.push(operations.setColumns(1));
     controller.syncState();
-    reflowNotes(data.state.cols);
   },
   updateNoteData: function (e, model) {
-    if (e.target.tagName == 'INPUT') {
-      data.model.notes[model.index].title = e.target.value;
+    let updatedNoteIndex;
+    if (data.state.filters.length > 0 || data.state.search != "") {
+      const filteredNotes = rivets.formatters.filterByFilterItems(data.model.notes,data.state.filters,data.state.search);
+      updatedNoteIndex = data.model.notes.indexOf(filteredNotes[model.index]); 
     } else {
-      data.model.notes[model.index].text = e.target.innerText;
+      updatedNoteIndex = model.index;
     }
-    modelOperationsQueue.push({ type: 'update', note: data.model.notes[model.index] });
+    if (e.target.tagName == 'INPUT') {
+      data.model.notes[updatedNoteIndex].title = e.target.value;
+    } else {
+      data.model.notes[updatedNoteIndex].text = e.target.innerText;
+    }
+    modelOperationsQueue.push({ type: 'update', note: data.model.notes[updatedNoteIndex] });
     controller.syncNotes();
   },
   applyTextFilterFromTag: function (e, model) {
-    data.state.filters.push(data.model.notes[model['%note%']].tags[model['%tag%']].title);
-    reflowNotes(data.state.cols);
+    console.log("here we go");
+    const filterText = data.model.notes[model['%note%']].tags[model['%tag%']].title;
+    stateOperationsQueue.push(operations.addFilter(filterText));
+    controller.syncState();
   },
   applyTextFilterFromSearch: function (e, model) {
     if (data.state.search != '') {
@@ -148,21 +154,26 @@ const controller = {
     }
   },
   syncState: function () {
+    const opCount = stateOperationsQueue.length;
     for (const operation of stateOperationsQueue) {
       stateHistory.push(data.state);
       data.state = operation(data.state);
     }
+    reflowNotes(data.state.cols);
+    console.log("Applied "+opCount+" operations.");
     stateOperationsQueue.splice(0,stateOperationsQueue.length);
     pageParams(data.state);
   },
   popState: function () {
-    console.log("winner")
     if (stateHistory.length > 0) {
       data.state = stateHistory.pop();
       console.log(data.state)
+      reflowNotes(data.state.cols);
+    } else {
+      console.log("nothing to undo")
     }
-    reflowNotes(data.state.cols);
   }
 }
 
+window.data = data;
 module.exports = controller;

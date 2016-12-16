@@ -10,11 +10,10 @@ const controller = require('./js/controller');
 const pageParams = require('./js/helpers').pageParams;
 const data = require('./js/models').data;
 
-require('./js/custom-rivets.js');
+require('./js/custom-rivets');
+require('./js/audio');
 
-controller.loadNotes();
-
-data.state.cols = pageParams()['cols'] || 1;
+controller.init();
 
 const handleKeys = function (e) {
   if (e.altKey) {

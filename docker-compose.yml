@@ -2,8 +2,8 @@ store:
   image: mongo
   ports:
    - "27017:27017"
-  volumes:
-   - "/home/ec2-user/data:/data/db"
+     #volumes:
+    # - "/home/ec2-user/data:/data/db"
 core:
   build: .
   ports:
@@ -12,5 +12,5 @@ core:
     - store
   env_file:
     - core-vars.env
-#  volumes:
-#    - "./dist:/usr/src/app/dist"
+  volumes:
+    - "./dist:/usr/src/app/dist"

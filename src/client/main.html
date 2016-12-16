@@ -7,56 +7,7 @@
 </head>
 <body>
   <div class="container-fluid" id="content">
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12">
-        <h1 class="pull-left">{ data.model.title }</h1>
-        <h1 class="pull-right">
-          <a><i class="fa fa-th grid-layout" aria-hidden="true" rv-on-click="controller.viewGrid"></i></a>
-          <a><i class="fa fa-th-large list-layout" aria-hidden="true" rv-on-click="controller.viewBook"></i></a>
-          <a><i class="fa fa-list list-layout" aria-hidden="true" rv-on-click="controller.viewList"></i></a>
-          <a><i class="fa fa-undo list-layout" aria-hidden="true" rv-on-click="controller.popState"></i></a>
-        </h1>
-        <input id="search" class="full-width" type="text" rv-on-enter="controller.applyTextFilterFromSearch" rv-value="data.state.search" placeholder="Search file text, tags, etc...">
-      </div>
-    </div>
-    <div class="row">
-      <ul class="filters col-md-12">
-        <li class="filter" rv-each-filter="data.state.filters">{ filter }
-          <a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.deleteFilter"></i></a>
-        </li>
-        <li class="filter search" rv-show="data.state.search | eq ''">{ data.state.search }
-          <a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.clearSearch"></i></a>
-        </li>
-        <li class="filter pull-right" rv-on-click="controller.clearAll">Clear</li>
-      </ul>
-    </div>
-    <div class="row">
-      <div class="grid col-md-12">
-        <div class="note grid-item" rv-each-note="data.model.notes | filterByFilterItems data.state.filters data.state.search">
-          <div class="note-container">
-            <b><input class="note-title" type="text" rv-value="note.title" rv-on-enter="controller.updateNoteData" rv-on-blur="controller.updateNoteData" placeholder="New note"></b>
-            <p contenteditable="true" class="note-text" rv-text="note.text" rv-on-blur="controller.updateNoteData" data-placeholder="Write some nice stuff here!"></p>
-            <p class="date">{ note.dateCreated }</p>
-            <div class="tags">
-              <ul class="tags">
-                <li class="tag" rv-each-tag="note.tags">
-                  <p contenteditable="false" class="tag" type="text" rv-text="tag.title" rv-on-enter="controller.updateTagData" rv-on-blur="controller.updateTagData" rv-on-click="controller.applyTextFilterFromTag" data-placeholder="tag name"></p><a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.deleteTag"></i></a>
-                </li>
-                <li class="add-tag">
-                  <a><i class="fa fa-plus-square" aria-hidden="true" rv-on-click="controller.addTag"></i></a>
-                </li>
-                <li class="delete-note">
-                  <a><i class="fa fa-times" aria-hidden="true" rv-on-click="controller.deleteNote"></i></a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="add-note">
-        <a><i class="fa fa-plus-square add-note" aria-hidden="true" rv-on-click="controller.newNote"></i></a>
-      </div>
-    </div>
+    <canvas id="spectrogram" width="800" height="800">
   </div>
   <script src="rivets.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha256-/5pHDZh2fv1eZImyfiThtB5Ag4LqDjyittT7fLjdT/8=" crossorigin="anonymous"></script>

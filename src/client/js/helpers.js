@@ -1,5 +1,7 @@
 'use strict';
 
+var kMeans = require('./kmeans.js');
+
 const Spectrogram = (id) => {
   console.log("here")
   const self = {};
@@ -156,6 +158,25 @@ const Spectrogram = (id) => {
       }
       return highlighted;
     })
+    var logHighlights = highlighted.map(function (curr, i) {
+      const logIndex = self.logScale(i, data.length);
+      return highlighted[logIndex];
+    });
+
+    const k = 4;
+
+    var km = new kMeans({
+      K: k
+    });
+
+    const peaksWrapped = Array.from(logIntensities).map(function (curr, i) {
+      return [i,logHighlights[i]];
+    }).filter(function (curr) {
+      return curr[1] == 1;
+    })
+    const peaks = peaksWrapped.map(function (curr) {
+      return curr[0]
+    });
 
     var barWidth = (self.width / data.length);
     for(var i = 0; i < data.length; i++) {
@@ -164,7 +185,59 @@ const Spectrogram = (id) => {
 
       //self.ctx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
       self.ctx.fillStyle = 'rgb(' + highlighted[logIndex] * self.height + 100 + ',50,50)';
-      self.ctx.fillRect(i * barWidth,self.height-barHeight/2,barWidth,barHeight/2);
+      self.ctx.fillRect(i * barWidth,self.height-barHeight - 20,barWidth,barHeight);
+    }
+
+    var peakLocs = [];
+    try {
+      if (peaks.length > 0) {
+        const peakBreaks = [];
+        peaksWrapped.map(function (curr, i) {
+          if (i == 0) {
+            peakBreaks.push(curr[0]);
+          } else if (i - 1 >= 0 && peaksWrapped[i-1][0]+1 != curr[0]) {
+            peakBreaks.push(peaksWrapped[i-1][0])
+            peakBreaks.push(curr[0]);
+          } else if (i == peaksWrapped.length - 1) {
+            peakBreaks.push(curr[0]);
+          }
+        }).filter(function (curr) {
+          return curr != null;
+        });
+
+        peakLocs = peakBreaks.map(function (curr, i) {
+          if (i % 2 != 0) {
+            return null;
+          } else {
+            return [peakBreaks[i],peakBreaks[i+1]];
+          }
+        }).filter(function (curr) {
+          return curr != null;
+        });
+        console.log(peakLocs)
+        
+
+        for (var i = 0; i < peakLocs.length; i++) {
+          self.ctx.fillStyle = 'rgb(0,0,0)';
+          self.ctx.fillRect(peakLocs[i][0],self.height-10,peakLocs[i][1]-peakLocs[i][0],10);
+        }
+
+        // km.cluster(peaks);
+
+        // while (km.step()) {
+        //   km.findClosestCentroids();
+        //   km.moveCentroids();
+
+        //   if(km.hasConverged()) break;
+        // }
+
+        // for (var i = 0; i < km.centroids.length; i++) {
+        //   self.ctx.fillStyle = 'rgb(0,0,0)';
+        //   self.ctx.fillRect(km.centroids[i][0],400,10,10);
+        // }
+      }
+    } catch (e) {
+      console.log(e);
     }
 
     console.log('drawing')

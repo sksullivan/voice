@@ -21,6 +21,7 @@ const controller = {
   },
   init: function () {
     initAudio();
+    controller.bindData();
   },
   syncState: function () {
     const opCount = stateOperationsQueue.length;

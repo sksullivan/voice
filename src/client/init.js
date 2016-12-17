@@ -11,7 +11,6 @@ const pageParams = require('./js/helpers').pageParams;
 const data = require('./js/models').data;
 
 require('./js/custom-rivets');
-require('./js/audio');
 
 controller.init();
 

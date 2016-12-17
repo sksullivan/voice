@@ -3,7 +3,7 @@
 // Application State
 
 const model = {
-  title: 'Welcome to the notebook',
+  title: 'Formant Analysis',
 };
 
 const state = {

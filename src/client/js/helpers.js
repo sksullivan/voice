@@ -40,20 +40,13 @@ const Spectrogram = (id) => {
       // Make blob out of our blobs, and open it.
       var blob = new Blob(self.recorderChunks, { 'type' : 'audio/ogg; codecs=opus' });
       
-      var oReq = new XMLHttpRequest();
-      oReq.open("POST", self.audioDestURL, true);
-      oReq.onload = function (oEvent) {
-        console.log(oEvent);
-      };
-
-      oReq.send(blob);
+      ws.send(blob);
       
       var audioTag = document.createElement('audio');
       document.querySelector("audio").src = URL.createObjectURL(blob);
     };
 
-    self.interval = 1;
-    self.audioDestURL = "";
+    self.interval = 50;
     self.recorder.start();
     setTimeout(self.startTimer, 1000/self.interval);
     self.animate();
@@ -189,6 +182,17 @@ function err() {
 
 module.exports = function initAudio () {
   console.log("init")
+  
+}
+
+var ws = new WebSocket('ws://localhost:5000/audio');
+
+ws.onopen = function(evt) {
+  console.log('Connected to websocket.');
+
+  // First message: send the sample rate
+  ws.send("sample rate:" + sampleRate);
+
   navigator.webkitGetUserMedia({audio:true}, callback, err);
 }
 

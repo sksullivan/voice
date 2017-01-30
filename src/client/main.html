@@ -7,10 +7,9 @@
 </head>
 <body>
   <div class="container-fluid" id="content">
-    <h1>{ data.model.title }</h1>
+    <h1>{ data.state.f1 } - { data.state.f2 } => { data.state.vowel }</h1>
+    <span style="display: inline;">{ data.state.f1 } - { data.state.f2 }</span><br>
     <canvas id="spectrogram" width="700" height="700"></canvas>
-    <button>Start</button>
-    <audio controls></audio>
   </div>
   <script src="rivets.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha256-/5pHDZh2fv1eZImyfiThtB5Ag4LqDjyittT7fLjdT/8=" crossorigin="anonymous"></script>
